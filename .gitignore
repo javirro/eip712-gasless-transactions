@@ -1,0 +1,5 @@
+off-chain/node_modules
+off-chain/dist
+
+on-chain/.env
+off-chain/.env
