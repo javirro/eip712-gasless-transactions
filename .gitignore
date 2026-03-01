@@ -3,3 +3,7 @@ off-chain/dist
 
 on-chain/.env
 off-chain/.env
+
+on-chain/cache
+on-chain/out
+on-chain/broadcast

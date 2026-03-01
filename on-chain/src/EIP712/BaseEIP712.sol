@@ -56,5 +56,13 @@ abstract contract BaseEIP712 is EIP712 {
         return recoveredSigner == signer;
     }
 
+    /**
+     * @dev Returns the name and version of the EIP-712 domain.
+     * @return The name and version of the EIP-712 domain.
+     */
+    function getNameAndVersion() external view returns (string memory, string memory) {
+        return (_EIP712Name(), _EIP712Version());
+    }
+
 }
 
