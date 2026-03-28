@@ -1,4 +1,4 @@
-# Gasless ERC20 Transfer — On-chain Contracts
+# Gasless Meta-Transactions — On-chain Contracts
 
 Solidity 0.8.33 · Foundry · OpenZeppelin
 
@@ -12,8 +12,8 @@ Abstract base extending OZ's `EIP712`. Provides:
 - `verifySignature(signer, structHash, sig)` — returns bool
 - `SIGNATURE_LENGTH = 65` constant used across all signature checks
 
-### `MetaRelayer` (`src/EIP712/MetaTransactions.sol`)
-Main contract. Inherits `BaseEIP712`.
+### `MetaTransactions` (`src/EIP712/MetaTransactions.sol`)
+Main contract. Inherits `BaseEIP712`. Enables gasless calls to any smart contract: the user signs a `MetaTx` struct off-chain and a relayer submits it on-chain.
 
 **Key state:**
 ```solidity
@@ -22,28 +22,27 @@ mapping(address => uint256) public nonces;
 
 **Entry point:**
 ```solidity
-function executeGaslessTx(
-    address token,
-    address from,
-    address to,
-    uint256 amount,
+function executeMetaTx(
+    address from,      // signer (the user)
+    address target,    // contract to call
+    bytes calldata data,     // calldata for the target
     uint256 deadline,
-    bytes memory permitSig,    // ERC-2612 permit signature
-    bytes memory transferSig   // EIP-712 MetaTransfer signature
+    bytes calldata sig // EIP-712 MetaTx signature
 ) external
 ```
 
 **Execution steps:**
-1. Validates `deadline` and signature lengths
-2. Calls `token.permit(from, address(this), amount, deadline, permitSig)` — silently ignores revert (allowance may already be set)
-3. Recovers signer from `transferSig` against the `MetaTransfer` struct hash — reverts if mismatch
-4. Increments `nonces[from]`
-5. Calls `token.safeTransferFrom(from, to, amount)`
+1. Validates `deadline` and `sig` length (must be 65 bytes)
+2. Recovers signer from `sig` against the `MetaTx` struct hash — reverts with `MetaTransactions__InvalidSignature` if mismatch
+3. Increments `nonces[from]`
+4. Calls `target.call(data)` — reverts with `MetaTransactions__CallFailed` if the call fails
 
-**MetaTransfer typehash:**
+**MetaTx typehash:**
 ```
-MetaTransfer(address token, address from, address to, uint256 amount, uint256 nonce, uint256 deadline)
+MetaTx(address from, address target, bytes data, uint256 nonce, uint256 deadline)
 ```
+
+> `bytes data` is encoded as `keccak256(data)` inside the struct hash, as required by EIP-712 for dynamic types.
 
 ---
 

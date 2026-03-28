@@ -3,7 +3,7 @@ pragma solidity 0.8.33;
 
 import {Script} from "forge-std/Script.sol";
 import {console} from "forge-std/console.sol";
-import {MetaRelayer}  from "../src/EIP712/MetaTransactions.sol";
+import {MetaRelayer}  from "../src/EIP712/MetaTransactionsWithPermit.sol";
 
 contract MetaTransactionsScript is Script {
     MetaRelayer public metaRelayer;
