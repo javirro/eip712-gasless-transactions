@@ -3,17 +3,17 @@ pragma solidity 0.8.33;
 
 import {Script} from "forge-std/Script.sol";
 import {console} from "forge-std/console.sol";
-import {MetaTransactions}  from "../src/EIP712/MetaTransactions.sol";
+import {MetaRelayer}  from "../src/EIP712/MetaTransactionsWithPermit.sol";
 
-contract DeployMetaTransactions is Script {
-    MetaTransactions public metaTransactions;
+contract MetaTransactionsScript is Script {
+    MetaRelayer public metaRelayer;
 
     function run() public {
       uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
         vm.startBroadcast(deployerPrivateKey);
 
-        metaTransactions = new MetaTransactions("MetaTransactions", "1");
-        console.log("MetaTransactions deployed at:", address(metaTransactions));
+        metaRelayer = new MetaRelayer("MetaRelayer", "1");
+        console.log("MetaRelayer deployed at:", address(metaRelayer));
         vm.stopBroadcast();
     }
 }

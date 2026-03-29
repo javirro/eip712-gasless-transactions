@@ -9,7 +9,8 @@
     "start": "tsx src/index.ts",
     "gassless-transfer": "tsx src/gasslessERC20Transfer.ts",
     "permit-erc2612": "tsx src/tokenERC2612/permit.ts",
-    "transfer-with-permit": "tsx src/tokenERC2612/transferWithPermit.ts"
+    "transfer-with-permit": "tsx src/tokenERC2612/transferWithPermit.ts",
+    "meta-transaction": "tsx src/metaTransactions/metaTransactions.ts"
   },
   "keywords": [],
   "author": "",

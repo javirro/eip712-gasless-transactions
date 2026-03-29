@@ -1,7 +1,7 @@
 import { createWalletClient, http, publicActions } from 'viem'
 import { RELAYER_ACCOUNT, SIGNER_ACCOUNT } from './config'
 import { polygon } from 'viem/chains'
-import { ADDRESSES, ERC20_PERMIT_ABI, META_RELAYER_ABI, USDC_ADDRESS } from './smartcontract/addresses'
+import { META_RELAYER_PERMIT, ERC20_PERMIT_ABI, META_RELAYER_ABI, USDC_ADDRESS } from './smartcontract/addresses'
 
 async function gasslessERC20Transfer(destination: string, amount: string) {
   if (!destination || !amount) {
@@ -21,7 +21,7 @@ async function gasslessERC20Transfer(destination: string, amount: string) {
   }).extend(publicActions)
 
   const tokenAddress = USDC_ADDRESS[polygon.id]
-  const metaRelayerAddress = ADDRESSES[polygon.id]
+  const metaRelayerAddress = META_RELAYER_PERMIT[polygon.id]
 
   // --- Fetch on-chain data in parallel ---
   const [nameAndVersion, metaNonce, tokenName, tokenVersion, permitNonce, decimals] = await Promise.all([

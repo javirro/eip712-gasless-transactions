@@ -59,6 +59,7 @@ contract MetaTransactions is BaseEIP712 {
         validateSignature(from, structHash, sig);
         nonces[from]++;
 
+        // Perform the call to the target contract with the provided data
         (bool success,) = target.call(data);
         if (!success) revert MetaTransactions__CallFailed();
 
